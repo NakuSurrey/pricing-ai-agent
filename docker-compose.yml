@@ -1,0 +1,48 @@
+# docker-compose 1.29 compatible syntax (top-level cpus / mem_limit, not deploy block)
+# NHS-incident lessons baked in:
+#   - cpus cap so one container cannot pin the host
+#   - mem_limit so one container cannot OOM the host
+#   - tmpfs /tmp with noexec,nosuid so dropped binaries cannot run
+#   - .env is loaded, never committed — .env.example documents the shape
+version: "3.8"
+
+services:
+  pricing-agent:
+    build: .
+    container_name: pricing-agent
+    restart: unless-stopped
+
+    # NHS lesson: cap cpu to 2 of 4 available on the host
+    cpus: 2.0
+
+    # NHS lesson: cap memory to 2 GiB
+    mem_limit: 2g
+
+    # NHS lesson: /tmp in RAM, cannot execute files
+    # this kills the classic "curl ... -o /tmp/x && chmod +x && /tmp/x" chain
+    tmpfs:
+      - /tmp:noexec,nosuid,size=64M
+
+    # port 8090 was picked during port discovery — free on the host,
+    # already allowed in the hetzner cloud firewall
+    ports:
+      - "8090:8090"
+
+    # load groq key + config from .env (not committed to git)
+    env_file:
+      - .env
+
+    # persist chroma vector store across container restarts
+    volumes:
+      - chroma_data:/app/chroma_db
+      - ./logs:/app/logs
+
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://localhost:8090/_stcore/health || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
+
+volumes:
+  chroma_data:

@@ -1,0 +1,30 @@
+# --- agent orchestration ---
+langgraph==0.2.50
+langchain-core==0.3.21
+
+# --- llm client (groq) ---
+langchain-groq==0.2.1
+groq==0.13.0
+
+# --- embeddings + vector db ---
+sentence-transformers==3.3.1
+chromadb==0.5.23
+
+# --- api + ui ---
+fastapi==0.115.5
+uvicorn[standard]==0.32.1
+streamlit==1.40.2
+requests==2.32.3
+
+# --- validation + config ---
+pydantic==2.10.3
+pydantic-settings==2.6.1
+python-dotenv==1.0.1
+
+# --- observability ---
+loguru==0.7.2
+
+# --- tests ---
+pytest==8.3.4
+pytest-asyncio==0.25.0
+httpx==0.28.1
