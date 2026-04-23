@@ -1,0 +1,61 @@
+{
+  "currency": "GBP",
+  "disclaimer": "Indicative annual premiums for a mock home-insurance product. Not a quote. Actual pricing requires full underwriting.",
+  "base_rules": [
+    {"property_type": "flat",       "bedrooms": 1, "risk_profile": "low",    "base_annual_premium": 180},
+    {"property_type": "flat",       "bedrooms": 2, "risk_profile": "low",    "base_annual_premium": 225},
+    {"property_type": "flat",       "bedrooms": 2, "risk_profile": "medium", "base_annual_premium": 310},
+    {"property_type": "flat",       "bedrooms": 3, "risk_profile": "medium", "base_annual_premium": 360},
+    {"property_type": "terraced",   "bedrooms": 2, "risk_profile": "low",    "base_annual_premium": 265},
+    {"property_type": "terraced",   "bedrooms": 2, "risk_profile": "medium", "base_annual_premium": 340},
+    {"property_type": "terraced",   "bedrooms": 3, "risk_profile": "low",    "base_annual_premium": 305},
+    {"property_type": "terraced",   "bedrooms": 3, "risk_profile": "medium", "base_annual_premium": 385},
+    {"property_type": "terraced",   "bedrooms": 3, "risk_profile": "high",   "base_annual_premium": 495},
+    {"property_type": "semi",       "bedrooms": 2, "risk_profile": "low",    "base_annual_premium": 290},
+    {"property_type": "semi",       "bedrooms": 3, "risk_profile": "low",    "base_annual_premium": 345},
+    {"property_type": "semi",       "bedrooms": 3, "risk_profile": "medium", "base_annual_premium": 420},
+    {"property_type": "semi",       "bedrooms": 3, "risk_profile": "high",   "base_annual_premium": 540},
+    {"property_type": "semi",       "bedrooms": 4, "risk_profile": "medium", "base_annual_premium": 485},
+    {"property_type": "detached",   "bedrooms": 3, "risk_profile": "low",    "base_annual_premium": 410},
+    {"property_type": "detached",   "bedrooms": 4, "risk_profile": "low",    "base_annual_premium": 495},
+    {"property_type": "detached",   "bedrooms": 4, "risk_profile": "medium", "base_annual_premium": 620},
+    {"property_type": "detached",   "bedrooms": 4, "risk_profile": "high",   "base_annual_premium": 790},
+    {"property_type": "detached",   "bedrooms": 5, "risk_profile": "medium", "base_annual_premium": 735},
+    {"property_type": "detached",   "bedrooms": 5, "risk_profile": "high",   "base_annual_premium": 945}
+  ],
+  "modifiers": {
+    "flood_zone": {
+      "standard": 1.00,
+      "medium":   1.35,
+      "high":     1.80
+    },
+    "claims_last_5_years": {
+      "0":  1.00,
+      "1":  1.15,
+      "2":  1.35,
+      "3+": 1.60
+    },
+    "security": {
+      "none":               1.10,
+      "standard_locks":     1.00,
+      "alarm_and_deadlocks": 0.90
+    },
+    "property_age_band": {
+      "post_2000":   0.95,
+      "1945_to_2000": 1.00,
+      "1900_to_1945": 1.10,
+      "pre_1900":    1.25
+    },
+    "policy_type": {
+      "standard":   1.00,
+      "landlord":   1.20,
+      "high_value": 1.45,
+      "flood_zone_extension": 1.25
+    }
+  },
+  "notes": [
+    "base_annual_premium is in GBP before modifiers are applied",
+    "final indicative premium = base * flood_zone * claims * security * property_age_band * policy_type",
+    "values are synthetic — not based on any real insurer's book"
+  ]
+}
