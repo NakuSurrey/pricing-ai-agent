@@ -16,10 +16,12 @@ logger.remove()
 
 # read config from env, with sensible defaults for local dev
 _LOG_LEVEL = os.getenv("LOG_LEVEL", "INFO").upper()
-_TRACE_FILE = Path(os.getenv("TRACE_FILE", "./logs/trace.jsonl"))
+# loguru sink now points at app.log — trace.jsonl is owned by app/tracer.py
+# this split keeps the trace file purely tracer records, no loguru noise mixed in
+_LOG_FILE = Path(os.getenv("LOG_FILE", "./logs/app.log"))
 
 # make sure the log dir exists — loguru won't create parents for us
-_TRACE_FILE.parent.mkdir(parents=True, exist_ok=True)
+_LOG_FILE.parent.mkdir(parents=True, exist_ok=True)
 
 # human-readable sink for stderr — what a dev reads in the terminal
 logger.add(
@@ -36,9 +38,9 @@ logger.add(
     diagnose=False,
 )
 
-# structured sink for machine reading — used by the eval harness later
+# structured sink for machine reading — separate from trace.jsonl on purpose
 logger.add(
-    _TRACE_FILE,
+    _LOG_FILE,
     level=_LOG_LEVEL,
     serialize=True,          # one json object per line
     rotation="10 MB",        # start a new file when this one gets big
