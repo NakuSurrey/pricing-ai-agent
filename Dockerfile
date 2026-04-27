@@ -13,18 +13,19 @@ FROM python:3.11-slim
 # to keep the image small. PYTHONDONTWRITEBYTECODE keeps __pycache__ out of layers.
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
-    PIP_NO_CACHE_DIR=1
+    PIP_NO_CACHE_DIR=1 \
+    PYTHONPATH=/app
 
 RUN apt-get update \
- && apt-get install -y --no-install-recommends curl ca-certificates \
- && rm -rf /var/lib/apt/lists/*
+    && apt-get install -y --no-install-recommends curl ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 
 # install python deps first (cached layer) before copying the rest of the source
 COPY requirements.txt /app/requirements.txt
 RUN pip install --upgrade pip \
- && pip install -r /app/requirements.txt
+    && pip install -r /app/requirements.txt
 
 # copy the project last so source edits don't bust the deps layer
 COPY . /app
@@ -51,7 +52,7 @@ RUN printf '%s\n' \
     '  --server.headless=true \' \
     '  --browser.gatherUsageStats=false' \
     > /app/entrypoint.sh \
- && chmod +x /app/entrypoint.sh
+    && chmod +x /app/entrypoint.sh
 
 # the default chroma persist dir lives inside /app — mount the named volume here
 # in docker-compose so the embeddings survive container restarts.
